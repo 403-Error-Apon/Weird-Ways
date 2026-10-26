@@ -111,7 +111,7 @@
     openModal({
       eyebrow: "A LITTLE ABOUT ME / FILE Nº 403",
       title: "So, you want to know who I am?",
-      body: "I am a first year DU criminology student. Curious about people. Frequently hungry. Enjoys horror, silly ideas, and clicking things that say 'do not click.' You can check out my FB profile if you like :)",
+      body: "I am a first year DU criminology student. Curious about people. Frequently hungry. Enjoys horror, silly ideas, and clicking things that say 'do not click.'  You can check out my FB profile if you like :)",
       icon: "⌕"
     });
   }
