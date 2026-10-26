@@ -18,6 +18,12 @@
   let secretClickCount = 0;
   let secretResetTimer;
   let themeActive = false;
+  let watcherClicks = 0;
+  let watcherIsAvoiding = false;
+  let watcherTimer = null;
+  let watcherPeekTimer = null;
+  let linkClickCount = 0;
+  let updateNoticeShown = false;
   let modalTrigger = null;
 
   const statuses = [
@@ -28,6 +34,23 @@
     ["Side quest available.", "Reward: a very small amount of satisfaction."],
     ["Apon.exe is running.", "Estimated stability: questionable."]
   ];
+
+  // Easter egg 13: remember repeat visits in this browser, without a backend.
+  try {
+    const visitKey = "weirdWaysVisitCount";
+    const oldCount = Number.parseInt(localStorage.getItem(visitKey) || "0", 10);
+    const visitCount = (Number.isFinite(oldCount) ? oldCount : 0) + 1;
+    localStorage.setItem(visitKey, String(visitCount));
+    const greetings = [
+      "Welcome, stranger. Try not to break anything.",
+      "Oh. It's you again.",
+      "Back already? I knew you would be.",
+      "You know where everything is now. That's mildly concerning.",
+      "Apon says you can stay. I wasn't consulted."
+    ];
+    window.setTimeout(() => showToast(greetings[Math.min(visitCount - 1, greetings.length - 1)], 4200), 900);
+  } catch (_) { /* The site still works when browser storage is unavailable. */ }
+
 
   function showToast(message, duration = 3200) {
     const toast = document.createElement("div");
@@ -130,6 +153,65 @@
     showToast(replies[Math.floor(Math.random() * replies.length)]);
   });
 
+  // Easter egg 05: fixed watcher. Three clicks trigger a warning; three more
+  // make it look away. It peeks back for a moment every nine seconds.
+  const fixedWatcher = $("#fixedWatcher");
+  const watcherCaption = $("#watcherCaption");
+  function watcherLooksAway() {
+    watcherIsAvoiding = true;
+    fixedWatcher.classList.add("is-looking-away");
+    fixedWatcher.classList.remove("is-looking-back");
+    watcherCaption.textContent = "NOT LOOKING";
+    window.clearInterval(watcherTimer);
+    window.clearTimeout(watcherPeekTimer);
+    watcherTimer = window.setInterval(() => {
+      if (!watcherIsAvoiding) return;
+      fixedWatcher.classList.add("is-looking-back");
+      fixedWatcher.classList.remove("is-looking-away");
+      watcherCaption.textContent = "JUST CHECKING";
+      watcherPeekTimer = window.setTimeout(() => {
+        if (!watcherIsAvoiding) return;
+        fixedWatcher.classList.remove("is-looking-back");
+        fixedWatcher.classList.add("is-looking-away");
+        watcherCaption.textContent = "NOT LOOKING";
+      }, 1700);
+    }, 9000);
+  }
+  fixedWatcher.addEventListener("click", () => {
+    watcherClicks += 1;
+    if (watcherClicks === 3) {
+      fixedWatcher.classList.add("is-startled");
+      showToast("Stop it!!");
+      window.setTimeout(() => fixedWatcher.classList.remove("is-startled"), 900);
+    } else if (watcherClicks === 6) {
+      showToast("Okey, Okey, I won't look at you anymore.");
+      watcherLooksAway();
+    } else if (watcherClicks > 6 && watcherIsAvoiding) {
+      showToast("I said I wasn't looking. That was a lie.");
+      fixedWatcher.classList.add("is-looking-back");
+      fixedWatcher.classList.remove("is-looking-away");
+      watcherCaption.textContent = "CAUGHT YOU";
+      window.setTimeout(() => {
+        if (watcherIsAvoiding) {
+          fixedWatcher.classList.remove("is-looking-back");
+          fixedWatcher.classList.add("is-looking-away");
+          watcherCaption.textContent = "NOT LOOKING";
+        }
+      }, 1700);
+    } else {
+      showToast(watcherClicks < 3 ? "The little smile is watching you back." : "It's trying very hard to ignore you.");
+    }
+  });
+  document.addEventListener("pointermove", (event) => {
+    if (watcherIsAvoiding && !fixedWatcher.classList.contains("is-looking-back")) return;
+    const rect = fixedWatcher.getBoundingClientRect();
+    const dx = Math.max(-3, Math.min(3, (event.clientX - (rect.left + rect.width / 2)) / 45));
+    const dy = Math.max(-2, Math.min(2, (event.clientY - (rect.top + rect.height / 2)) / 55));
+    fixedWatcher.style.setProperty("--look-x", `${dx}px`);
+    fixedWatcher.style.setProperty("--look-y", `${dy}px`);
+  }, { passive:true });
+
+
   $("#normalButton").addEventListener("click", () => {
     showToast("Acting normal... FAILED. Please try being weirder.");
     document.body.classList.add("tiny-shake");
@@ -150,6 +232,59 @@
       icon: "✉"
     });
   });
+
+  // Easter egg 11: after any five anchor-link clicks, display a fake changelog.
+  document.addEventListener("click", (event) => {
+    const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
+    if (!link || link.classList.contains("skip-link") || updateNoticeShown) return;
+    linkClickCount += 1;
+    if (linkClickCount >= 5) {
+      updateNoticeShown = true;
+      window.setTimeout(() => openModal({
+        eyebrow:"SYSTEM NOTICE / VERSION 0.403",
+        title:"WEIRD WAYS HAS UPDATED",
+        body:"Fixed 0 bugs. Added 7 bugs. Made the website 3% weirder. You may notice absolutely no difference.",
+        icon:"↻"
+      }), 180);
+    }
+  });
+
+  // Easter egg 16: custom right-click menu only on the floating question mark.
+  const secretObject = $("#secretObject");
+  const customContextMenu = $("#customContextMenu");
+  function hideContextMenu() { customContextMenu.hidden = true; }
+  secretObject.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+    customContextMenu.hidden = false;
+    const rect = customContextMenu.getBoundingClientRect();
+    const margin = 10;
+    customContextMenu.style.left = `${Math.max(margin, Math.min(event.clientX, window.innerWidth - rect.width - margin))}px`;
+    customContextMenu.style.top = `${Math.max(margin, Math.min(event.clientY, window.innerHeight - rect.height - margin))}px`;
+    customContextMenu.querySelector('[role="menuitem"]')?.focus({ preventScroll:true });
+  });
+  customContextMenu.addEventListener("click", (event) => {
+    const item = event.target instanceof Element ? event.target.closest("[data-context-action]") : null;
+    if (!item) return;
+    const action = item.dataset.contextAction;
+    hideContextMenu();
+    if (action === "inspect") openModal({ eyebrow:"OBJECT Nº 403 / INSPECTION", title:"It is a question mark.", body:"You right-clicked a decorative object to inspect it. That's exactly the sort of energy this website was built for.", icon:"?" });
+    else if (action === "leave") showToast("Good call. It looked like it was about to ask you something.");
+  });
+  document.addEventListener("pointerdown", (event) => {
+    if (!customContextMenu.hidden && !customContextMenu.contains(event.target) && event.target !== secretObject) hideContextMenu();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") hideContextMenu();
+    if ((event.key === "ArrowDown" || event.key === "ArrowUp") && !customContextMenu.hidden && customContextMenu.contains(document.activeElement)) {
+      event.preventDefault();
+      const items = $$('[role="menuitem"]', customContextMenu);
+      const index = items.indexOf(document.activeElement);
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      items[(index + step + items.length) % items.length]?.focus();
+    }
+  });
+  window.addEventListener("resize", hideContextMenu);
+  window.addEventListener("scroll", hideContextMenu, { passive:true });
 
   function activateTheme() {
     if (themeActive) return;
@@ -200,6 +335,10 @@
     typedBuffer = (typedBuffer + event.key.toLowerCase()).slice(-4);
     if (typedBuffer === "apon") {
       typedBuffer = "";
+      document.body.classList.remove("egg-celebration");
+      void document.body.offsetWidth;
+      document.body.classList.add("egg-celebration");
+      window.setTimeout(() => document.body.classList.remove("egg-celebration"), 2200);
       showToast("APON DETECTED. Okay, you know too much.");
     }
   });
@@ -208,6 +347,12 @@
   $(".footer-brand").addEventListener("click", (event) => {
     event.preventDefault();
     window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  });
+
+  window.addEventListener("pagehide", () => {
+    window.clearInterval(watcherTimer);
+    window.clearTimeout(watcherPeekTimer);
+    window.clearTimeout(secretResetTimer);
   });
 
   // Avoid running a continuous motion ticker for users who prefer reduced motion.

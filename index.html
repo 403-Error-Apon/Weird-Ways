@@ -62,7 +62,7 @@
             <div class="orbit orbit-one"></div>
             <div class="orbit orbit-two"></div>
             <div class="orbit orbit-three"></div>
-            <div class="orbit-core" aria-hidden="true">?</div>
+            <button class="orbit-core" id="secretObject" type="button" aria-label="A mysterious floating question mark">?</button>
             <span class="orbit-label orbit-label-a">CURIOSITY</span>
             <span class="orbit-label orbit-label-b">SIDE QUEST</span>
             <button class="orbit-spark spark-one" type="button" aria-label="Inspect the floating star">✳</button>
@@ -99,6 +99,7 @@
             <p>But you’re here now. So look around. Click something you shouldn't. Meet a stranger. Find a thing that makes absolutely no sense.</p>
             <p class="small-note">This place is a work in progress.<br>Much like its owner.</p>
           </div>
+          <p class="hidden-whisper">You're either very observant or have absolutely nothing to do.</p>
         </div>
         <div class="intro-doodle" aria-hidden="true">
           <div class="doodle-ring"></div>
@@ -158,6 +159,18 @@
       <span class="footer-note">MADE WITH QUESTIONABLE INTENTIONS BY APON KHAN</span>
       <button class="footer-403" id="secret403" type="button" aria-label="Activate the forbidden theme">403</button>
     </footer>
+  </div>
+
+  <button class="fixed-watcher" id="fixedWatcher" type="button" aria-label="The suspicious smile is watching you">
+    <span class="watcher-face" aria-hidden="true"><span class="watcher-eyes"><i></i><i></i></span><span class="watcher-mouth"></span></span>
+    <span class="watcher-caption" id="watcherCaption" aria-hidden="true">I SEE YOU</span>
+  </button>
+
+  <div class="custom-context-menu" id="customContextMenu" role="menu" aria-label="Mysterious object menu" hidden>
+    <div class="context-menu-label">OBJECT Nº 403</div>
+    <button type="button" role="menuitem" data-context-action="inspect">Inspect the weirdness</button>
+    <button type="button" role="menuitem" data-context-action="leave">Leave it alone</button>
+    <button type="button" role="menuitem" data-context-action="close">Close menu ×</button>
   </div>
 
   <div class="toast-region" id="toastRegion" role="status" aria-live="polite" aria-atomic="true"></div>
