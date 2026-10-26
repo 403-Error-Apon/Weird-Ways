@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10110f">
+  <meta name="description" content="Weird Ways — a tiny corner of the internet for curious people and questionable decisions.">
+  <title>Weird Ways — take the weird way</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="site-shell" id="siteShell">
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Weird Ways home">
+        <span class="brand-mark" aria-hidden="true">✳</span>
+        <span>weird ways<span class="brand-period">.</span></span>
+      </a>
+      <div class="header-status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>INTERNET ODDITIES</span>
+      </div>
+      <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="siteNav">
+        <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+      <nav class="site-nav" id="siteNav" aria-label="Main navigation">
+        <a href="#the-place">The place</a>
+        <a href="#oddities">Oddities</a>
+        <button class="nav-link" id="whoButton" type="button">Who is Apon?</button>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <div class="eyebrow">
+            <span class="eyebrow-pill">A PERSONAL EXPERIMENT</span>
+            <span class="eyebrow-separator" aria-hidden="true">✳</span>
+            <span>PROBABLY HARMLESS</span>
+          </div>
+          <h1 id="heroTitle">THE INTERNET<br><span class="accent-text">GOT WEIRD.</span><br><span class="hero-last-line">So did I<span class="accent-text">.</span></span></h1>
+          <p class="hero-description">A tiny corner of the internet for strange thoughts, curious people, questionable decisions, and things that probably shouldn't be clickable.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#oddities">Explore the weirdness <span aria-hidden="true">↗</span></a>
+            <button class="button button-secondary" id="aboutButton" type="button">Who is Apon?</button>
+          </div>
+          <div class="hero-footnote"><span class="tiny-star" aria-hidden="true">✳</span> BEST EXPERIENCED WITH CURIOSITY</div>
+        </div>
+
+        <div class="hero-art" aria-label="A playful interactive status panel">
+          <div class="art-topline">
+            <span>WW / STATUS PANEL</span>
+            <span class="live-label"><span class="status-dot"></span> LIVE-ISH</span>
+          </div>
+          <div class="orbit-scene" id="orbitScene">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="orbit orbit-three"></div>
+            <div class="orbit-core" aria-hidden="true">?</div>
+            <span class="orbit-label orbit-label-a">CURIOSITY</span>
+            <span class="orbit-label orbit-label-b">SIDE QUEST</span>
+            <button class="orbit-spark spark-one" type="button" aria-label="Inspect the floating star">✳</button>
+            <button class="orbit-spark spark-two" type="button" aria-label="Inspect the tiny dot">·</button>
+            <span class="orbit-sticker">NOT A<br>PORTFOLIO</span>
+          </div>
+          <div class="status-card">
+            <div>
+              <span class="mini-label">CURRENT STATUS</span>
+              <h2 id="statusTitle">Curiosity detected.</h2>
+              <p id="statusDescription">Please proceed irresponsibly.</p>
+            </div>
+            <button class="status-refresh" id="statusRefresh" type="button" aria-label="Generate a new status">↻</button>
+          </div>
+          <div class="art-bottomline">
+            <span>THERE ARE SECRETS HERE</span>
+            <span class="scroll-cue" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="ticker" aria-label="Site motto">
+        <div class="ticker-track" aria-hidden="true">
+          <span>TAKE THE WEIRD WAY</span><b>✳</b><span>STAY CURIOUS</span><b>✳</b><span>NO NORMAL PEOPLE ALLOWED</span><b>✳</b><span>TAKE THE WEIRD WAY</span><b>✳</b><span>STAY CURIOUS</span><b>✳</b>
+        </div>
+      </section>
+
+      <section class="intro-section section-grid" id="the-place">
+        <div class="section-kicker"><span>01 / THE PLACE</span><span class="kicker-line"></span></div>
+        <div class="intro-content">
+          <p class="section-overline">YOU FOUND YOUR WAY HERE.</p>
+          <h2>There are easier<br>ways to spend<br>your <span class="serif-italic">time.</span></h2>
+          <div class="intro-bottom">
+            <p>But you’re here now. So look around. Click something you shouldn't. Meet a stranger. Find a thing that makes absolutely no sense.</p>
+            <p class="small-note">This place is a work in progress.<br>Much like its owner.</p>
+          </div>
+        </div>
+        <div class="intro-doodle" aria-hidden="true">
+          <div class="doodle-ring"></div>
+          <span class="doodle-star">✳</span>
+          <span class="doodle-caption">FIG. 403<br>AN UNNECESSARY OBJECT</span>
+        </div>
+      </section>
+
+      <section class="oddities-section" id="oddities">
+        <div class="section-heading">
+          <div>
+            <div class="section-overline">02 / THINGS TO DO, PROBABLY</div>
+            <h2>A few <span class="serif-italic">oddities.</span></h2>
+          </div>
+          <p>Not everything here has a purpose.<br>Some things have excellent excuses.</p>
+        </div>
+        <div class="oddity-grid">
+          <article class="oddity-card oddity-card-lime">
+            <div class="card-index">ODDITY Nº 001 <span>✳</span></div>
+            <div class="card-illustration illustration-eye" aria-hidden="true"><span class="eye-shape"><i></i></span><span class="eye-caption">I SAW THAT.</span></div>
+            <h3>Something's watching.</h3>
+            <p>Probably just a decorative element. Probably.</p>
+            <button class="text-button" id="watchButton" type="button">Look closer <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="oddity-card oddity-card-purple">
+            <div class="card-index">ODDITY Nº 002 <span>↗</span></div>
+            <div class="card-illustration illustration-window" aria-hidden="true">
+              <div class="fake-window"><div class="fake-window-bar"><i></i><i></i><i></i></div><div class="fake-window-content">404?<br><span>nah.</span></div></div>
+            </div>
+            <h3>A suspicious button.</h3>
+            <p>It says not to click it. You know what to do.</p>
+            <button class="text-button" id="dontClickButton" type="button">Definitely don't <span aria-hidden="true">↗</span></button>
+          </article>
+          <article class="oddity-card oddity-card-pink">
+            <div class="card-index">ODDITY Nº 003 <span>☻</span></div>
+            <div class="card-illustration illustration-smiley" aria-hidden="true"><button id="smileyButton" type="button" aria-label="Talk to the suspicious smiley">:)</button><span>IT KNOWS.</span></div>
+            <h3>Very normal behavior.</h3>
+            <p>Nothing suspicious happening here. Keep moving.</p>
+            <button class="text-button" id="normalButton" type="button">Act normal <span aria-hidden="true">↗</span></button>
+          </article>
+        </div>
+      </section>
+
+      <section class="guestbook-teaser">
+        <div class="guestbook-symbol" aria-hidden="true">✉</div>
+        <div class="guestbook-copy">
+          <div class="section-overline">A MESSAGE FROM ONE STRANGER TO ANOTHER</div>
+          <h2>Leave a little<br><span class="serif-italic">weirdness</span> behind.</h2>
+          <p>The secret guestbook isn't open yet. But it will be. Eventually. Probably.</p>
+        </div>
+        <button class="button button-dark" id="guestbookButton" type="button">Check the door <span aria-hidden="true">↗</span></button>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="footer-brand" href="#" aria-label="Back to top">WEIRD WAYS<span>.</span></a>
+      <span class="footer-note">MADE WITH QUESTIONABLE INTENTIONS BY APON KHAN</span>
+      <button class="footer-403" id="secret403" type="button" aria-label="Activate the forbidden theme">403</button>
+    </footer>
+  </div>
+
+  <div class="toast-region" id="toastRegion" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <dialog class="modal" id="modal" aria-labelledby="modalTitle">
+    <div class="modal-top"><span class="modal-label">WEIRD WAYS / NOTICE</span><button class="modal-close" id="modalClose" type="button" aria-label="Close dialog">×</button></div>
+    <div class="modal-content">
+      <span class="modal-icon" id="modalIcon" aria-hidden="true">✳</span>
+      <p class="section-overline" id="modalEyebrow">A QUICK INTERRUPTION</p>
+      <h2 id="modalTitle">Apon is being silly again.</h2>
+      <p id="modalBody">This is a small interruption. Everything is fine. Almost certainly.</p>
+      <button class="button button-primary" id="modalOkay" type="button">Fair enough <span aria-hidden="true">↗</span></button>
+    </div>
+  </dialog>
+
+  <div class="theme-overlay" id="themeOverlay" aria-hidden="true">
+    <div class="theme-overlay-noise"></div>
+    <div class="theme-overlay-content">
+      <p>WEIRD WAYS / RESTRICTED AREA</p>
+      <h2>YOU FOUND<br><span>THE WRONG WAY.</span></h2>
+      <p class="theme-overlay-message">ACCESS DENIED. REASON: APON IS BEING SILLY AGAIN.</p>
+      <button class="button button-glitch" id="restoreTheme" type="button">Return to normal-ish</button>
+      <span class="theme-overlay-code">ERR_403 // THIS IS FINE</span>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
