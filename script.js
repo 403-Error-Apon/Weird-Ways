@@ -20,6 +20,7 @@
   let themeActive = false;
   let watcherClicks = 0;
   let watcherIsAvoiding = false;
+  let watcherSilentUntilPeek = false;
   let watcherTimer = null;
   let watcherPeekTimer = null;
   let linkClickCount = 0;
@@ -27,12 +28,12 @@
   let modalTrigger = null;
 
   const statuses = [
-    ["Curiosity detected.", "Please proceed irresponsibly."],
-    ["Suspicious activity.", "Someone is clicking things again."],
-    ["Snack protocol active.", "Academic responsibility not found."],
-    ["Everything is normal.", "This message has been reviewed by absolutely nobody."],
-    ["Side quest available.", "Reward: a very small amount of satisfaction."],
-    ["Apon.exe is running.", "Estimated stability: questionable."]
+    ["Curiosity detected.", "Go on, make questionable decisions."],
+    ["Suspicious activity.", "Someone is clicking around."],
+    ["Snack break pending.", "Academic responsibility can wait a minute."],
+    ["Everything is normal.", "Probably."],
+    ["A side quest awaits.", "Your reward: a tiny bit of satisfaction."],
+    ["Apon.exe is running.", "Stability not guaranteed."]
   ];
 
   // Easter egg 13: remember repeat visits in this browser, without a backend.
@@ -42,11 +43,11 @@
     const visitCount = (Number.isFinite(oldCount) ? oldCount : 0) + 1;
     localStorage.setItem(visitKey, String(visitCount));
     const greetings = [
-      "Welcome, stranger. Try not to break anything.",
-      "Oh. It's you again.",
-      "Back already? I knew you would be.",
-      "You know where everything is now. That's mildly concerning.",
-      "Apon says you can stay. I wasn't consulted."
+      "Welcome, stranger. Have a look around.",
+      "Oh. It’s you again.",
+      "Back already?",
+      "You seem to know your way around now.",
+      "Welcome back. Make yourself at home."
     ];
     window.setTimeout(() => showToast(greetings[Math.min(visitCount - 1, greetings.length - 1)], 4200), 900);
   } catch (_) { /* The site still works when browser storage is unavailable. */ }
@@ -64,7 +65,7 @@
     }, duration);
   }
 
-  function openModal({ title, body, eyebrow = "A QUICK INTERRUPTION", icon = "✳" }) {
+  function openModal({ title, body, eyebrow = "A LITTLE INTERRUPTION FROM ME", icon = "✳" }) {
     modalTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     modalTitle.textContent = title;
     modalBody.textContent = body;
@@ -108,9 +109,9 @@
 
   function showAbout() {
     openModal({
-      eyebrow: "FILE Nº 403 / SUBJECT: APON",
-      title: "A person of mild concern.",
-      body: "DU criminology student. Curious about people. Frequently hungry. Enjoys horror, silly ideas, and clicking things that say 'do not click.' Further investigation is encouraged.",
+      eyebrow: "A LITTLE ABOUT ME / FILE Nº 403",
+      title: "So, you want to know who I am?",
+      body: "I am a first year DU criminology student. Curious about people. Frequently hungry. Enjoys horror, silly ideas, and clicking things that say 'do not click.' You can check out my FB profile if you like :)",
       icon: "⌕"
     });
   }
@@ -128,8 +129,8 @@
   $("#watchButton").addEventListener("click", () => {
     openModal({
       eyebrow: "OBSERVATION LOG",
-      title: "It noticed you noticing.",
-      body: "Don't worry. It's only a CSS illustration. It has no camera, no access to your files, and absolutely no useful information.",
+      title: "I think it noticed you noticing.",
+      body: "Don’t worry, I made it with CSS. It has no camera, no access to your files, and absolutely no useful information. Unlike me, it also has no idea what you’re doing here.",
       icon: "◉"
     });
   });
@@ -137,8 +138,8 @@
   $("#dontClickButton").addEventListener("click", () => {
     openModal({
       eyebrow: "UNAUTHORIZED BUTTON PRESS",
-      title: "I literally said don't.",
-      body: "ACCESS DENIED. REASON: APON IS BEING SILLY AGAIN. Please take a moment to reflect on your choices. Or click again. I'm not your supervisor.",
+      title: "I literally told you not to.",
+      body: "ACCESS DENIED. REASON: I’M BEING SILLY AGAIN. Take a moment to reflect on your choices. Or click again. I’m not your supervisor, and honestly, I’d probably click it too.",
       icon: "⚠"
     });
   });
@@ -146,9 +147,9 @@
   $("#smileyButton").addEventListener("click", () => {
     const replies = [
       "What? Why are you looking at me?",
-      "I was smiling before you got here.",
-      "We need to stop meeting like this.",
-      "I know what you clicked last summer."
+      "I was smiling before you got here. Don’t make it weird.",
+      "You and I need to stop meeting like this.",
+      "I know what you clicked last summer. I made a note."
     ];
     showToast(replies[Math.floor(Math.random() * replies.length)]);
   });
@@ -169,6 +170,8 @@
       fixedWatcher.classList.add("is-looking-back");
       fixedWatcher.classList.remove("is-looking-away");
       watcherCaption.textContent = "JUST CHECKING";
+      watcherSilentUntilPeek = false;
+      watcherClicks = 6;
       watcherPeekTimer = window.setTimeout(() => {
         if (!watcherIsAvoiding) return;
         fixedWatcher.classList.remove("is-looking-back");
@@ -178,6 +181,9 @@
     }, 9000);
   }
   fixedWatcher.addEventListener("click", () => {
+    // Once it has decided not to look, it counts three more clicks before
+    // refusing to talk. It stays silent until the next scheduled nine-second peek.
+    if (watcherSilentUntilPeek) return;
     watcherClicks += 1;
     if (watcherClicks === 3) {
       fixedWatcher.classList.add("is-startled");
@@ -186,20 +192,11 @@
     } else if (watcherClicks === 6) {
       showToast("Okey, Okey, I won't look at you anymore.");
       watcherLooksAway();
-    } else if (watcherClicks > 6 && watcherIsAvoiding) {
-      showToast("I said I wasn't looking. That was a lie.");
-      fixedWatcher.classList.add("is-looking-back");
-      fixedWatcher.classList.remove("is-looking-away");
-      watcherCaption.textContent = "CAUGHT YOU";
-      window.setTimeout(() => {
-        if (watcherIsAvoiding) {
-          fixedWatcher.classList.remove("is-looking-back");
-          fixedWatcher.classList.add("is-looking-away");
-          watcherCaption.textContent = "NOT LOOKING";
-        }
-      }, 1700);
-    } else {
-      showToast(watcherClicks < 3 ? "The little smile is watching you back." : "It's trying very hard to ignore you.");
+    } else if (watcherClicks === 9 && watcherIsAvoiding) {
+      showToast("I won't talk to you anymore.");
+      watcherSilentUntilPeek = true;
+    } else if (watcherClicks < 3) {
+      showToast("What? Why are you looking at me?");
     }
   });
   document.addEventListener("pointermove", (event) => {
@@ -213,22 +210,22 @@
 
 
   $("#normalButton").addEventListener("click", () => {
-    showToast("Acting normal... FAILED. Please try being weirder.");
+    showToast("I tried to act normal. Failed. Come on, you can be weirder than that.");
     document.body.classList.add("tiny-shake");
     window.setTimeout(() => document.body.classList.remove("tiny-shake"), 380);
   });
 
   $$(".orbit-spark").forEach((spark, index) => {
     spark.addEventListener("click", () => {
-      showToast(index === 0 ? "You found a star. Congratulations, astronomer." : "That dot has a complicated backstory.");
+      showToast(index === 0 ? "You found the star I put there. Congratulations, astronomer." : "That dot has a complicated backstory. I’m not telling you yet.");
     });
   });
 
   $("#guestbookButton").addEventListener("click", () => {
     openModal({
-      eyebrow: "DOOR Nº 03 / NOT OPEN YET",
-      title: "The guestbook is hiding.",
-      body: "The strangers' room is still being prepared. When it opens, you'll be able to leave a note for someone you've never met. Until then, consider this your first knock.",
+      eyebrow: "MY GUESTBOOK / DOOR Nº 03",
+      title: "I haven’t opened this door yet.",
+      body: "I’m still getting my little strangers’ room ready. When I finally open it, you’ll be able to leave a note for someone you’ve never met. Until then, I’ll count this as your first knock.",
       icon: "✉"
     });
   });
@@ -241,9 +238,9 @@
     if (linkClickCount >= 5) {
       updateNoticeShown = true;
       window.setTimeout(() => openModal({
-        eyebrow:"SYSTEM NOTICE / VERSION 0.403",
-        title:"WEIRD WAYS HAS UPDATED",
-        body:"Fixed 0 bugs. Added 7 bugs. Made the website 3% weirder. You may notice absolutely no difference.",
+        eyebrow:"A QUICK UPDATE FROM ME / VERSION 0.403",
+        title:"I UPDATED WEIRD WAYS",
+        body:"I fixed 0 bugs, added 7 bugs, and made this website 3% weirder. You may not notice a difference. That’s probably my fault.",
         icon:"↻"
       }), 180);
     }
@@ -267,8 +264,8 @@
     if (!item) return;
     const action = item.dataset.contextAction;
     hideContextMenu();
-    if (action === "inspect") openModal({ eyebrow:"OBJECT Nº 403 / INSPECTION", title:"It is a question mark.", body:"You right-clicked a decorative object to inspect it. That's exactly the sort of energy this website was built for.", icon:"?" });
-    else if (action === "leave") showToast("Good call. It looked like it was about to ask you something.");
+    if (action === "inspect") openModal({ eyebrow:"THE THING I HID / OBJECT Nº 403", title:"It’s a question mark. Obviously.", body:"You right-clicked the decorative object I put here. Honestly, I respect that level of curiosity. I made this website for people who investigate things they probably shouldn’t.", icon:"?" });
+    else if (action === "leave") showToast("Good call. I think it was about to ask you something.");
   });
   document.addEventListener("pointerdown", (event) => {
     if (!customContextMenu.hidden && !customContextMenu.contains(event.target) && event.target !== secretObject) hideContextMenu();
@@ -308,7 +305,7 @@
     secretClickCount += 1;
     window.clearTimeout(secretResetTimer);
     if (secretClickCount >= 1) {
-      showToast(secretClickCount < 3 ? `403 noticed. ${3 - secretClickCount} more ${3 - secretClickCount === 1 ? "click" : "clicks"} to make things weird.` : "Well. You asked for this.");
+      showToast(secretClickCount < 3 ? `I see you found my 403. ${3 - secretClickCount} more ${3 - secretClickCount === 1 ? "click" : "clicks"} and I’ll make things weird.` : "Well, you asked for this. Don’t blame me.");
     }
     if (secretClickCount >= 3) {
       activateTheme();
@@ -339,7 +336,7 @@
       void document.body.offsetWidth;
       document.body.classList.add("egg-celebration");
       window.setTimeout(() => document.body.classList.remove("egg-celebration"), 2200);
-      showToast("APON DETECTED. Okay, you know too much.");
+      showToast("APON DETECTED. Okay, you know way too much about me now.");
     }
   });
 
